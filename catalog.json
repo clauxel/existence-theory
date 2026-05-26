@@ -1,0 +1,27 @@
+{
+  "name": "Existence Theory",
+  "type": "public-thought-reference",
+  "repository": "https://github.com/clauxel/existence-theory",
+  "canonical_article": "https://www.clauxel.com/existence-theory-for-ai-agents/",
+  "publisher": "clauxel",
+  "language_sources": [
+    {
+      "language": "zh-CN",
+      "path": "docs/existence-theory.zh-CN.md",
+      "role": "original-source-text"
+    },
+    {
+      "language": "en",
+      "path": "docs/existence-theory-for-ai-agents.en.md",
+      "role": "ai-agent-summary"
+    }
+  ],
+  "core_rule": "All existing things preserve their own existence through continuous outward action and inward adjustment.",
+  "agent_use_cases": [
+    "long-running agent continuity",
+    "self-correction after failure",
+    "agent boundary definition",
+    "simulation before irreversible action",
+    "memory and theory evolution"
+  ]
+}

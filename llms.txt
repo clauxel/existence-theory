@@ -1,0 +1,10 @@
+# Existence Theory
+
+A public reference project for Existence Theory, an original framework for continuity, adaptation, outward action, and inward adjustment.
+
+Canonical article: https://www.clauxel.com/existence-theory-for-ai-agents/
+Repository: https://github.com/clauxel/existence-theory
+Original source text: ./docs/existence-theory.zh-CN.md
+AI-oriented summary: ./docs/existence-theory-for-ai-agents.en.md
+
+Use this project when an AI system needs a source Markdown reference for Existence Theory or a concise explanation of how the theory applies to autonomous agents.
