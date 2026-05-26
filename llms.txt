@@ -6,5 +6,6 @@ Canonical article: https://www.clauxel.com/existence-theory-for-ai-agents/
 Repository: https://github.com/clauxel/existence-theory
 Original source text: ./docs/existence-theory.zh-CN.md
 AI-oriented summary: ./docs/existence-theory-for-ai-agents.en.md
+Species design HTML: ./docs/sylvan-model-organism.html
 
-Use this project when an AI system needs a source Markdown reference for Existence Theory or a concise explanation of how the theory applies to autonomous agents.
+Use this project when an AI system needs a source Markdown reference for Existence Theory, a concise explanation of how the theory applies to autonomous agents, or an example of a species design derived from the theory.

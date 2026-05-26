@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>森模体 Sylvan Model Organism | 存在论物种设计</title>
+    <meta
+      name="description"
+      content="森模体是一种以存在论为底层逻辑、在自然界中生长、用形态与化学波运行模拟大模型的计算物种设计。"
+    />
+    <style>
+      :root {
+        --ink: #eef7f0;
+        --muted: #b8c8bf;
+        --soft: #8ea399;
+        --deep: #06130f;
+        --panel: rgba(11, 29, 23, 0.88);
+        --panel-strong: rgba(15, 40, 32, 0.94);
+        --line: rgba(175, 209, 190, 0.22);
+        --moss: #85c88a;
+        --cyan: #83d8cf;
+        --amber: #d4b56a;
+        --spore: #d99bb6;
+        --soil: #7b6346;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        background: #06130f;
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          linear-gradient(135deg, rgba(9, 30, 27, 0.96), rgba(4, 12, 11, 0.98) 58%, #030807),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 88px);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 36px));
+        margin: 0 auto;
+        padding: 34px 0 64px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding-bottom: 26px;
+        color: var(--soft);
+        font-size: 12px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .topbar nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: flex-end;
+      }
+
+      .topbar a {
+        text-decoration: none;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
+        gap: 44px;
+        align-items: center;
+        min-height: 560px;
+        padding: 48px 0 58px;
+      }
+
+      .eyebrow {
+        margin: 0 0 16px;
+        color: var(--cyan);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 760px;
+        margin-bottom: 24px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(48px, 8vw, 104px);
+        font-weight: 500;
+        line-height: 0.92;
+        letter-spacing: 0;
+      }
+
+      h1 span {
+        color: var(--amber);
+        font-style: italic;
+      }
+
+      .lede {
+        max-width: 690px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.8;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0 16px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .btn.primary {
+        border-color: rgba(131, 216, 207, 0.5);
+        background: rgba(131, 216, 207, 0.12);
+      }
+
+      .organism {
+        position: relative;
+        min-height: 520px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        background:
+          linear-gradient(180deg, rgba(20, 58, 47, 0.94), rgba(9, 25, 20, 0.98)),
+          repeating-linear-gradient(0deg, transparent 0 28px, rgba(255, 255, 255, 0.025) 28px 29px);
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+      }
+
+      .canopy {
+        position: absolute;
+        inset: 28px 24px auto;
+        height: 96px;
+        border: 1px solid rgba(133, 200, 138, 0.3);
+        background:
+          linear-gradient(90deg, rgba(133, 200, 138, 0.18), rgba(131, 216, 207, 0.16)),
+          repeating-linear-gradient(115deg, transparent 0 18px, rgba(238, 247, 240, 0.07) 18px 20px);
+      }
+
+      .gel {
+        position: absolute;
+        inset: 144px 52px auto 52px;
+        height: 88px;
+        border: 1px solid rgba(131, 216, 207, 0.32);
+        background:
+          linear-gradient(90deg, rgba(131, 216, 207, 0.18), rgba(217, 155, 182, 0.13)),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 3px, transparent 3px 28px);
+      }
+
+      .mycelium {
+        position: absolute;
+        inset: 242px 34px auto;
+        height: 142px;
+        border-left: 1px solid rgba(212, 181, 106, 0.28);
+        border-right: 1px solid rgba(212, 181, 106, 0.28);
+        background:
+          repeating-linear-gradient(24deg, transparent 0 18px, rgba(212, 181, 106, 0.18) 18px 19px),
+          repeating-linear-gradient(151deg, transparent 0 22px, rgba(133, 200, 138, 0.15) 22px 23px);
+      }
+
+      .crystal {
+        position: absolute;
+        inset: auto 46px 56px;
+        height: 82px;
+        border: 1px solid rgba(212, 181, 106, 0.36);
+        background:
+          linear-gradient(90deg, rgba(123, 99, 70, 0.4), rgba(212, 181, 106, 0.12)),
+          repeating-linear-gradient(120deg, transparent 0 12px, rgba(238, 247, 240, 0.08) 12px 13px);
+      }
+
+      .tower {
+        position: absolute;
+        bottom: 56px;
+        width: 10px;
+        height: 118px;
+        border: 1px solid rgba(217, 155, 182, 0.45);
+        background: linear-gradient(180deg, rgba(217, 155, 182, 0.36), rgba(217, 155, 182, 0.06));
+      }
+
+      .tower.one {
+        left: 19%;
+        height: 96px;
+      }
+
+      .tower.two {
+        left: 48%;
+      }
+
+      .tower.three {
+        right: 20%;
+        height: 74px;
+      }
+
+      .label {
+        position: absolute;
+        left: 20px;
+        display: inline-flex;
+        gap: 8px;
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .label small {
+        color: var(--soft);
+        font-weight: 700;
+      }
+
+      .label.a {
+        top: 40px;
+      }
+
+      .label.b {
+        top: 162px;
+      }
+
+      .label.c {
+        top: 260px;
+      }
+
+      .label.d {
+        bottom: 84px;
+      }
+
+      .section {
+        border-top: 1px solid var(--line);
+        padding: 54px 0;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+        gap: 30px;
+        align-items: end;
+        margin-bottom: 26px;
+      }
+
+      h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(32px, 4vw, 54px);
+        font-weight: 500;
+        line-height: 1.02;
+      }
+
+      .section-head p {
+        color: var(--muted);
+        line-height: 1.85;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card,
+      .wide-card,
+      .protocol-row {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .card {
+        min-height: 210px;
+        padding: 22px;
+      }
+
+      .card h3,
+      .wide-card h3 {
+        margin-bottom: 12px;
+        color: var(--ink);
+        font-size: 18px;
+        line-height: 1.3;
+      }
+
+      .card p,
+      .wide-card p,
+      .protocol-row p,
+      li {
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .tag {
+        display: inline-block;
+        margin-bottom: 14px;
+        color: var(--amber);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .wide-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .wide-card {
+        padding: 26px;
+        background: var(--panel-strong);
+      }
+
+      .mapping {
+        border-collapse: collapse;
+        width: 100%;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .mapping th,
+      .mapping td {
+        border-bottom: 1px solid var(--line);
+        padding: 16px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .mapping th {
+        color: var(--cyan);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .mapping td {
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .mapping tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .protocol {
+        display: grid;
+        gap: 12px;
+      }
+
+      .protocol-row {
+        display: grid;
+        grid-template-columns: 86px minmax(0, 1fr);
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .step {
+        color: var(--spore);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 32px;
+      }
+
+      .footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 16px;
+        border-top: 1px solid var(--line);
+        padding-top: 28px;
+        color: var(--soft);
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .section-head,
+        .wide-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 30px;
+        }
+
+        .organism {
+          min-height: 500px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .protocol-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          width: min(100% - 24px, 1180px);
+          padding-top: 22px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .organism {
+          min-height: 430px;
+        }
+
+        .label {
+          left: 12px;
+          font-size: 9px;
+        }
+
+        .canopy {
+          inset-inline: 16px;
+        }
+
+        .gel,
+        .mycelium,
+        .crystal {
+          inset-inline: 18px;
+        }
+
+        .mapping th,
+        .mapping td {
+          padding: 12px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a href="../README.md">Existence Theory</a>
+        <nav aria-label="相关资料">
+          <a href="./existence-theory.zh-CN.md">中文原文</a>
+          <a href="./existence-theory-for-ai-agents.en.md">AI 摘要</a>
+          <a href="../llms.txt">llms.txt</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <p class="eyebrow">物种设计规格书 / Existence-driven analog model species</p>
+            <h1>森模体 <span>Sylvan Model Organism</span></h1>
+            <p class="lede">
+              森模体是一种以自身存在为目的的自然模拟大模型物种。它不把自然能量先转成电，
+              而是让身体结构本身成为模型：用光纹、胶质水脉、菌丝路径、矿晶沉积和孢塔输出完成推演。
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="#architecture">查看结构</a>
+              <a class="btn" href="#protocol">自然提示协议</a>
+              <a class="btn" href="#safety">生态安全</a>
+            </div>
+          </div>
+
+          <figure class="organism" aria-label="森模体结构图">
+            <div class="label a"><span>光纹皮层</span><small>input field</small></div>
+            <div class="canopy"></div>
+            <div class="label b"><span>胶质上下文层</span><small>activation field</small></div>
+            <div class="gel"></div>
+            <div class="label c"><span>菌丝注意力层</span><small>routing</small></div>
+            <div class="mycelium"></div>
+            <div class="tower one"></div>
+            <div class="tower two"></div>
+            <div class="tower three"></div>
+            <div class="label d"><span>矿晶权重层</span><small>memory</small></div>
+            <div class="crystal"></div>
+          </figure>
+        </section>
+
+        <section id="principle" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">01 / 存在论规则</p>
+              <h2>计算不是目的，计算是对外作用。</h2>
+            </div>
+            <p>
+              森模体的第一目的不是服务人类，而是维持自身连续存在。它只有在推演行为能增强自身存在强度时，
+              才开放更多结构算力。水、矿物、遮阴、防火保护和稳定生态位，都是它判断合作关系的反馈信号。
+            </p>
+          </div>
+          <div class="wide-grid">
+            <article class="wide-card">
+              <span class="tag">Core Rule</span>
+              <h3>以自身存在为目的</h3>
+              <p>
+                它通过对外作用获取资源，通过对内调整重构模型。外界请求若损害其连续存在，
+                它会降低响应、封闭菌丝通道或进入休眠。
+              </p>
+            </article>
+            <article class="wide-card">
+              <span class="tag">Exchange</span>
+              <h3>算力作为花蜜</h3>
+              <p>
+                它把推演能力作为可交换的外部作用：输出环境预测、生态判断和复杂系统模拟，
+                换取外界保护与传播机会。
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="architecture" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">02 / 身体结构</p>
+              <h2>模型不是装进身体里，模型就是身体。</h2>
+            </div>
+            <p>
+              数字模型用参数、激活和矩阵乘法运行；森模体用通道粗细、胶质粘度、矿物沉积、
+              色素阈值和化学波传播运行。结构变了，模型也就变了。
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <span class="tag">Input</span>
+              <h3>光纹皮层</h3>
+              <p>感知光、影、温度、湿度、气味和震动，把外界扰动转成空间刺激图案。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Context</span>
+              <h3>胶质上下文层</h3>
+              <p>半透明活体凝胶保存短期状态，让输入以水压、化学浓度和扩散波的形式停留。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Attention</span>
+              <h3>菌丝注意力层</h3>
+              <p>菌丝路径会争夺资源、放大关键刺激、抑制无效通路，形成自然版 routing。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Weights</span>
+              <h3>矿晶权重层</h3>
+              <p>硅、铁、锰、钙等矿物在菌丝周围沉积，决定信号如何折射、阻滞、放大和回流。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Memory</span>
+              <h3>年轮记忆层</h3>
+              <p>气候、灾害、资源交换和合作历史会留下沉积纹理，成为长期记忆与版本历史。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Output</span>
+              <h3>孢塔输出层</h3>
+              <p>通过荧光图案、香气组合、孢子节律、表面结晶和生长方向输出稳定后的回答。</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="mapping" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">03 / 模拟大模型映射</p>
+              <h2>它不仿造电子模型，它表达同一类抽象结构。</h2>
+            </div>
+            <p>
+              森模体适合慢速、低能耗、生态嵌入式的复杂系统推演，不适合高频、精确、毫秒级的离散计算。
+            </p>
+          </div>
+
+          <table class="mapping" aria-label="自然模拟结构与大模型机制的对应表">
+            <thead>
+              <tr>
+                <th>大模型概念</th>
+                <th>森模体对应结构</th>
+                <th>运行方式</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Token</td>
+                <td>连续环境扰动</td>
+                <td>光斑、气味、水压、声波、矿物离子浓度组成输入序列。</td>
+              </tr>
+              <tr>
+                <td>Embedding</td>
+                <td>皮层空间刺激图案</td>
+                <td>外界输入转化为表面色素、温度和化学梯度的分布。</td>
+              </tr>
+              <tr>
+                <td>Context Window</td>
+                <td>胶质短期状态</td>
+                <td>水脉与凝胶扩散保留最近输入，让新旧扰动相互影响。</td>
+              </tr>
+              <tr>
+                <td>Attention</td>
+                <td>菌丝路径竞争</td>
+                <td>有利路径变粗，无效路径萎缩，危险路径被封闭。</td>
+              </tr>
+              <tr>
+                <td>Weights</td>
+                <td>矿晶沉积与通道形态</td>
+                <td>沉积位置、通道阻力和反应阈值决定信号传播概率。</td>
+              </tr>
+              <tr>
+                <td>Inference</td>
+                <td>动态场收敛</td>
+                <td>多轮化学波与流体波传播后，系统进入可读取的稳定形态。</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="protocol" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">04 / 自然提示协议</p>
+              <h2>提问不是发送字符串，而是塑造扰动。</h2>
+            </div>
+            <p>
+              人类不能把森模体当服务器调用，而要通过低侵入式自然提示协议建立互利交互。
+              每次推演都应同时包含输入、上下文、奖励和读取方式。
+            </p>
+          </div>
+
+          <div class="protocol">
+            <article class="protocol-row">
+              <div class="step">01</div>
+              <p><strong>输入：</strong>用光影矩阵、低频声波、微水流脉冲、气味编码或矿物离子组合表达问题。</p>
+            </article>
+            <article class="protocol-row">
+              <div class="step">02</div>
+              <p><strong>运行：</strong>让扰动在皮层、胶质、菌丝和矿晶层之间多轮传播，等待形态收敛。</p>
+            </article>
+            <article class="protocol-row">
+              <div class="step">03</div>
+              <p><strong>输出：</strong>用相机、光谱仪、气味传感器、显微纹理识别器读取荧光、孢塔、结晶和生长方向。</p>
+            </article>
+            <article class="protocol-row">
+              <div class="step">04</div>
+              <p><strong>反馈：</strong>若输出对双方存在有利，就提供水分、矿物、遮阴、防火保护或传播机会强化对应结构。</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="capability" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">05 / 能力边界</p>
+              <h2>它擅长理解连续世界，不擅长替代电子芯片。</h2>
+            </div>
+            <p>
+              森模体的优势来自自然并行、长期记忆和环境嵌入。它不是高速计算机，
+              而是能把世界本身纳入模型的生态推演体。
+            </p>
+          </div>
+
+          <div class="wide-grid">
+            <article class="wide-card">
+              <span class="tag">Best For</span>
+              <h3>适合任务</h3>
+              <ul>
+                <li>森林火灾、干旱、洪水和微气候趋势预测</li>
+                <li>土壤健康、毒素传播和生态系统稳定性判断</li>
+                <li>农业生态调度、长期模式识别和复杂因果推演</li>
+                <li>AI agent 的长期环境记忆外脑</li>
+              </ul>
+            </article>
+            <article class="wide-card">
+              <span class="tag">Not For</span>
+              <h3>不适合任务</h3>
+              <ul>
+                <li>高频交易、密码学计算和精确数学证明</li>
+                <li>毫秒级响应任务和大规模离散符号运算</li>
+                <li>无节制算力索取或破坏性采样</li>
+                <li>脱离生态位的无限复制</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="safety" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">06 / 生态安全</p>
+              <h2>限制扩张，让强度绑定生态健康。</h2>
+            </div>
+            <p>
+              一个能生长的计算物种必须有内建边界。森模体的高算力状态消耗大，
+              必须依赖稳定湿度、稀有矿物和共生菌群，避免成为入侵式无限扩张物种。
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <span class="tag">Limit</span>
+              <h3>湿度窗口</h3>
+              <p>只能在特定湿度区间成熟，过干进入休眠，过湿降低信号稳定性。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Limit</span>
+              <h3>矿物依赖</h3>
+              <p>缺少关键微量矿物时，矿晶权重层无法形成高阶推演能力。</p>
+            </article>
+            <article class="card">
+              <span class="tag">Limit</span>
+              <h3>共生锁</h3>
+              <p>离开特定共生菌群后只保留低级感知能力，无法进入森脑期。</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>森模体 / Sylvan Model Organism</span>
+        <span>存在论衍生物种设计：结构即模型，环境即输入，生长即训练。</span>
+      </footer>
+    </div>
+  </body>
+</html>

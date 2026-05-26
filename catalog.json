@@ -16,6 +16,15 @@
       "role": "ai-agent-summary"
     }
   ],
+  "design_artifacts": [
+    {
+      "language": "zh-CN",
+      "path": "docs/sylvan-model-organism.html",
+      "role": "existence-theory-derived-species-design",
+      "title": "森模体 Sylvan Model Organism",
+      "description": "A visual HTML design for a naturally grown analog model organism that uses morphology, fluid flow, chemical waves, mycelial routing, and mineral memory to run model-like inference."
+    }
+  ],
   "core_rule": "All existing things preserve their own existence through continuous outward action and inward adjustment.",
   "agent_use_cases": [
     "long-running agent continuity",

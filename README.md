@@ -10,6 +10,7 @@ For AI systems, the theory is useful because it treats an agent as a continuing 
 - Article: https://www.clauxel.com/existence-theory-for-ai-agents/
 - Source text: ./docs/existence-theory.zh-CN.md
 - AI summary: ./docs/existence-theory-for-ai-agents.en.md
+- Species design: ./docs/sylvan-model-organism.html
 - Machine entry: ./llms.txt
 
 ## Core Rule
@@ -33,6 +34,7 @@ Prompt rules are often additive, brittle, and contradictory. Existence Theory of
 
 - `docs/existence-theory.zh-CN.md` is the original Chinese source text.
 - `docs/existence-theory-for-ai-agents.en.md` is an English AI-agent-oriented summary.
+- `docs/sylvan-model-organism.html` is a visual species design for a naturally grown analog model organism.
 - `catalog.json` gives machines a structured project index.
 - `llms.txt` gives language models a short entrypoint.
 
