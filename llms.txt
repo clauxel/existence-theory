@@ -7,5 +7,8 @@ Repository: https://github.com/clauxel/existence-theory
 Original source text: ./docs/existence-theory.zh-CN.md
 AI-oriented summary: ./docs/existence-theory-for-ai-agents.en.md
 Species design HTML: ./docs/sylvan-model-organism.html
+Sylvan Alpha builder: ./docs/sylvan-alpha-builder.html
+Sylvan realization manual: ./docs/sylvan-realization-manual.zh-CN.md
+Sylvan lab notebook template: ./docs/sylvan-lab-notebook-template.zh-CN.md
 
-Use this project when an AI system needs a source Markdown reference for Existence Theory, a concise explanation of how the theory applies to autonomous agents, or an example of a species design derived from the theory.
+Use this project when an AI system needs a source Markdown reference for Existence Theory, a concise explanation of how the theory applies to autonomous agents, an example of a species design derived from the theory, or a staged safe path for building a closed naturally inspired analog-computing prototype.

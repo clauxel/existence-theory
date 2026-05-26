@@ -23,6 +23,27 @@
       "role": "existence-theory-derived-species-design",
       "title": "森模体 Sylvan Model Organism",
       "description": "A visual HTML design for a naturally grown analog model organism that uses morphology, fluid flow, chemical waves, mycelial routing, and mineral memory to run model-like inference."
+    },
+    {
+      "language": "zh-CN",
+      "path": "docs/sylvan-alpha-builder.html",
+      "role": "interactive-realization-roadmap",
+      "title": "Sylvan Alpha Builder",
+      "description": "An interactive Alpha-0 field simulator and staged roadmap for turning the Sylvan species design into a closed, measurable, repeatable analog-computing prototype."
+    },
+    {
+      "language": "zh-CN",
+      "path": "docs/sylvan-realization-manual.zh-CN.md",
+      "role": "safe-implementation-manual",
+      "title": "森模体 Sylvan Alpha 落地手册",
+      "description": "A safe staged manual for building Sylvan Alpha without wild release, genetic modification, or unknown environmental cultures."
+    },
+    {
+      "language": "zh-CN",
+      "path": "docs/sylvan-lab-notebook-template.zh-CN.md",
+      "role": "experiment-log-template",
+      "title": "Sylvan Alpha 实验记录模板",
+      "description": "A repeatable lab-note template for documenting Sylvan Alpha input, readout, metrics, failures, and existence-strength updates."
     }
   ],
   "core_rule": "All existing things preserve their own existence through continuous outward action and inward adjustment.",

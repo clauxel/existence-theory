@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sylvan Alpha Builder | 森模体落地路线</title>
+    <meta
+      name="description"
+      content="Sylvan Alpha Builder 将森模体从存在论物种设计推进为封闭、可测、可复现的自然模拟计算原型路线。"
+    />
+    <style>
+      :root {
+        --ink: #edf3ee;
+        --muted: #b8c4bc;
+        --deep: #07110d;
+        --panel: rgba(14, 27, 22, 0.92);
+        --panel-2: rgba(21, 39, 33, 0.92);
+        --line: rgba(191, 218, 202, 0.2);
+        --moss: #91d18c;
+        --cyan: #8bd8cf;
+        --amber: #d8bb6f;
+        --rose: #d99bb1;
+        --soil: #9c7a55;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--deep);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 22% 0%, rgba(145, 209, 140, 0.13), transparent 34%),
+          radial-gradient(circle at 86% 18%, rgba(217, 155, 177, 0.11), transparent 30%),
+          linear-gradient(135deg, #07110d 0%, #10251e 48%, #060b09 100%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1220px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 56px;
+      }
+
+      .topbar,
+      .footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .topbar nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .topbar a,
+      .footer a {
+        text-decoration: none;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1fr);
+        gap: 26px;
+        align-items: stretch;
+        padding: 34px 0 28px;
+      }
+
+      .intro,
+      .sim-panel,
+      .panel,
+      .card,
+      .step,
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .intro {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 520px;
+        padding: 32px;
+      }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        color: var(--cyan);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 780px;
+        margin-bottom: 20px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(42px, 7vw, 88px);
+        font-weight: 500;
+        line-height: 0.96;
+        letter-spacing: 0;
+      }
+
+      h1 span,
+      .accent {
+        color: var(--amber);
+      }
+
+      .lede {
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.78;
+      }
+
+      .promise {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 28px;
+      }
+
+      .promise div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .promise strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--ink);
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .sim-panel {
+        min-height: 520px;
+        padding: 18px;
+        background: rgba(9, 24, 20, 0.96);
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #020705;
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      button,
+      select {
+        min-height: 40px;
+        border: 1px solid rgba(139, 216, 207, 0.34);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--ink);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      select {
+        padding: 0 10px;
+      }
+
+      .readout {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .readout div {
+        min-height: 66px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      .readout strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      .section {
+        border-top: 1px solid var(--line);
+        padding: 42px 0;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+        gap: 26px;
+        align-items: end;
+        margin-bottom: 18px;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(30px, 4vw, 52px);
+        font-weight: 500;
+        line-height: 1.04;
+      }
+
+      .section-head p,
+      .panel p,
+      .card p,
+      .step p,
+      li {
+        color: var(--muted);
+        line-height: 1.72;
+      }
+
+      .roadmap {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .step {
+        min-height: 260px;
+        padding: 20px;
+      }
+
+      .step .num {
+        color: var(--rose);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 36px;
+      }
+
+      .step h3,
+      .card h3,
+      .panel h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card,
+      .panel {
+        padding: 20px;
+        background: var(--panel-2);
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        padding: 16px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--amber);
+      }
+
+      .footer {
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+        line-height: 1.8;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .section-head,
+        .roadmap,
+        .grid,
+        .flow {
+          grid-template-columns: 1fr;
+        }
+
+        .intro {
+          min-height: auto;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .promise,
+        .readout,
+        .controls {
+          grid-template-columns: 1fr;
+        }
+
+        .intro,
+        .sim-panel {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a href="../README.md">Existence Theory</a>
+        <nav aria-label="Sylvan resources">
+          <a href="./sylvan-model-organism.html">物种设计</a>
+          <a href="./sylvan-realization-manual.zh-CN.md">落地手册</a>
+          <a href="./sylvan-lab-notebook-template.zh-CN.md">实验模板</a>
+          <a href="../llms.txt">llms.txt</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="intro">
+            <div>
+              <p class="eyebrow">Sylvan Alpha / 从设想到原型</p>
+              <h1>先做出一个<span>会生长的计算体</span></h1>
+              <p class="lede">
+                Sylvan Alpha 不是直接创造野外新物种，而是把森模体落成封闭生态盒：
+                身体产生非线性动态和记忆，外部输入自然扰动，读出层把形态翻译成判断。
+              </p>
+            </div>
+            <div class="promise">
+              <div><strong>可做</strong>从纯数字孪生开始，不需要等待生物实验条件。</div>
+              <div><strong>可测</strong>每一步都有输入、读取、指标和基线。</div>
+              <div><strong>可扩展</strong>从一个盒体走向多盒森脑阵列。</div>
+            </div>
+          </div>
+
+          <section class="sim-panel" aria-label="Sylvan Alpha digital twin">
+            <p class="eyebrow">Alpha-0 field simulator</p>
+            <canvas id="field" width="640" height="480"></canvas>
+            <div class="controls">
+              <select id="pattern" aria-label="Input pattern">
+                <option value="rain">Rain</option>
+                <option value="heat">Heat</option>
+                <option value="shade">Shade</option>
+                <option value="mineral">Mineral</option>
+              </select>
+              <button id="pulse" type="button">Pulse</button>
+              <button id="run" type="button">Run</button>
+              <button id="reset" type="button">Reset</button>
+            </div>
+            <div class="readout">
+              <div><strong id="action">rest</strong>action</div>
+              <div><strong id="stability">0.00</strong>stability</div>
+              <div><strong id="memory">0.00</strong>memory</div>
+              <div><strong id="routing">0.00</strong>routing</div>
+            </div>
+          </section>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Build path</p>
+              <h2>四个阶段，把 Sylvan 逐步做实。</h2>
+            </div>
+            <p>
+              路线的核心是先证明“身体动态可计算”，再加入非活体物理场，最后进入封闭活体材料。
+              每一阶段都能独立产出数据，不依赖下一阶段才有意义。
+            </p>
+          </div>
+          <div class="roadmap">
+            <article class="step">
+              <div class="num">00</div>
+              <h3>数字孪生</h3>
+              <p>用二维场模拟扩散、竞争、沉积和记忆。只训练读出层，不训练身体。</p>
+            </article>
+            <article class="step">
+              <div class="num">01</div>
+              <h3>非活体场</h3>
+              <p>用凝胶、分枝材料、矿物/碳基慢变量和相机，做出可拍照的物理 reservoir。</p>
+            </article>
+            <article class="step">
+              <div class="num">02</div>
+              <h3>封闭活体层</h3>
+              <p>使用封闭商业可食用菌丝材料，读取生长纹理和环境响应，不做开放释放。</p>
+            </article>
+            <article class="step">
+              <div class="num">03</div>
+              <h3>多盒森脑</h3>
+              <p>让快速凝胶盒、中速菌丝盒、慢速沉积盒分别承担不同时间尺度。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">MVP</p>
+              <h2>第一台森模盒只证明一件事。</h2>
+            </div>
+            <p>
+              它的身体状态必须能作为计算资源。不要先追求大语言模型，不要先追求自我繁殖，
+              先让一个封闭身体对输入历史产生可读、可复现、可训练的状态差异。
+            </p>
+          </div>
+          <div class="grid">
+            <article class="card">
+              <h3>输入</h3>
+              <p>光影图案、湿度脉冲、温度变化、低频振动。输入被写成自然扰动，而不是字符串。</p>
+            </article>
+            <article class="card">
+              <h3>身体</h3>
+              <p>凝胶保存短期状态，分枝路径做 routing，矿物/碳基沉积形成慢变量记忆。</p>
+            </article>
+            <article class="card">
+              <h3>输出</h3>
+              <p>相机和传感器读取纹理、波纹、分枝密度和环境恢复曲线，再由小读出层翻译。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Tasks</p>
+              <h2>用三个任务判断它是否真的在计算。</h2>
+            </div>
+            <p>
+              每个任务都要有基线。如果 Sylvan 的身体状态不能超过基线，它就还只是漂亮的材料，
+              不是计算体。
+            </p>
+          </div>
+          <div class="flow">
+            <div class="metric"><strong>四类扰动</strong>rain / heat / shade / mineral 分类。</div>
+            <div class="metric"><strong>湿度趋势</strong>预测未来一段时间的上升、下降或稳定。</div>
+            <div class="metric"><strong>存在行动</strong>water / shade / mineral / rest 维护建议。</div>
+            <div class="metric"><strong>复现</strong>至少 100 次运行，分开训练集和测试集。</div>
+            <div class="metric"><strong>胜过基线</strong>比随机、当前趋势或人工阈值更好。</div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Safety</p>
+              <h2>能持续存在，才算强。</h2>
+            </div>
+            <p>
+              Sylvan 的工程路线遵守封闭、非基改、非野外释放原则。先做可保存、可测量、可复现的工程物种；
+              生态释放不是 Alpha 阶段目标。
+            </p>
+          </div>
+          <div class="grid">
+            <article class="card">
+              <h3>封闭边界</h3>
+              <p>活体材料只在封闭盒中观察，不从野外采集未知菌种，不主动扩散孢子。</p>
+            </article>
+            <article class="card">
+              <h3>低风险材料</h3>
+              <p>优先使用非活体材料、商业可食用菌丝材料和普通环境传感器。</p>
+            </article>
+            <article class="card">
+              <h3>记录优先</h3>
+              <p>每一次失败都写入实验记录，形成可复盘的长期记忆。</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>Sylvan Alpha Builder</span>
+        <span><a href="https://github.com/clauxel/existence-theory">github.com/clauxel/existence-theory</a></span>
+      </footer>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("field");
+      const ctx = canvas.getContext("2d");
+      const pattern = document.getElementById("pattern");
+      const action = document.getElementById("action");
+      const stability = document.getElementById("stability");
+      const memoryLabel = document.getElementById("memory");
+      const routingLabel = document.getElementById("routing");
+      const runButton = document.getElementById("run");
+      const pulseButton = document.getElementById("pulse");
+      const resetButton = document.getElementById("reset");
+
+      const width = 96;
+      const height = 72;
+      const size = width * height;
+      let signal = new Float32Array(size);
+      let nextSignal = new Float32Array(size);
+      let memory = new Float32Array(size);
+      let route = new Float32Array(size);
+      let running = false;
+      let tick = 0;
+
+      function idx(x, y) {
+        return y * width + x;
+      }
+
+      function clamp(value, min = 0, max = 1) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function reset() {
+        tick = 0;
+        for (let i = 0; i < size; i += 1) {
+          signal[i] = Math.random() * 0.08;
+          memory[i] = Math.random() * 0.12;
+          route[i] = Math.random() * 0.2;
+        }
+        draw();
+        updateReadout();
+      }
+
+      function inject(kind) {
+        const cx = kind === "heat" ? width * 0.55 : width * 0.35;
+        const cy = kind === "mineral" ? height * 0.65 : height * 0.34;
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const i = idx(x, y);
+            if (kind === "rain") {
+              const band = Math.sin((x + tick) * 0.18) > 0.72 && y < height * 0.55;
+              signal[i] += band ? 0.65 : 0;
+            } else if (kind === "heat") {
+              const d = Math.abs(y - height * 0.18) + Math.abs(x - cx) * 0.25;
+              signal[i] += d < 18 ? 0.58 * (1 - d / 18) : 0;
+              route[i] *= 0.995;
+            } else if (kind === "shade") {
+              const block = x > width * 0.18 && x < width * 0.75 && y > height * 0.22 && y < height * 0.48;
+              signal[i] -= block ? 0.32 : 0;
+              memory[i] += block ? 0.002 : 0;
+            } else {
+              const d = Math.abs(x - y * 1.15) + Math.abs(x - cx) * 0.08 + Math.abs(y - cy) * 0.08;
+              const mark = d < 7 || Math.abs(x + y - width) < 5;
+              memory[i] += mark ? 0.035 : 0;
+              signal[i] += mark ? 0.25 : 0;
+            }
+          }
+        }
+      }
+
+      function step() {
+        tick += 1;
+        if (tick % 36 === 1) inject(pattern.value);
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const i = idx(x, y);
+            const left = signal[idx(Math.max(0, x - 1), y)];
+            const right = signal[idx(Math.min(width - 1, x + 1), y)];
+            const up = signal[idx(x, Math.max(0, y - 1))];
+            const down = signal[idx(x, Math.min(height - 1, y + 1))];
+            const lap = left + right + up + down - 4 * signal[i];
+            const nonlinear = Math.sin(signal[i] * 5.7 + route[i] * 2.1) * 0.018;
+            const routeBoost = route[i] * 0.018;
+            nextSignal[i] = clamp(signal[i] * 0.962 + lap * (0.11 + route[i] * 0.05) + nonlinear + routeBoost - memory[i] * 0.012);
+          }
+        }
+        const swap = signal;
+        signal = nextSignal;
+        nextSignal = swap;
+        for (let i = 0; i < size; i += 1) {
+          const growth = signal[i] > 0.42 ? 0.005 : -0.0015;
+          route[i] = clamp(route[i] + growth + (Math.random() - 0.5) * 0.002);
+          memory[i] = clamp(memory[i] * 0.9992 + signal[i] * route[i] * 0.0018);
+        }
+      }
+
+      function features() {
+        let s = 0;
+        let m = 0;
+        let r = 0;
+        let variance = 0;
+        for (let i = 0; i < size; i += 1) {
+          s += signal[i];
+          m += memory[i];
+          r += route[i];
+        }
+        s /= size;
+        m /= size;
+        r /= size;
+        for (let i = 0; i < size; i += 1) {
+          variance += (signal[i] - s) * (signal[i] - s);
+        }
+        variance = Math.sqrt(variance / size);
+        return { s, m, r, variance };
+      }
+
+      function updateReadout() {
+        const f = features();
+        const score = {
+          water: 0.7 - f.s + f.r * 0.2,
+          shade: f.s * 0.8 + f.variance * 0.5,
+          mineral: f.r * 0.65 + (0.45 - f.m) * 0.45,
+          rest: 0.42 + f.m * 0.3 - f.variance * 0.25,
+        };
+        const chosen = Object.entries(score).sort((a, b) => b[1] - a[1])[0][0];
+        action.textContent = chosen;
+        stability.textContent = clamp(1 - f.variance * 2.6).toFixed(2);
+        memoryLabel.textContent = f.m.toFixed(2);
+        routingLabel.textContent = f.r.toFixed(2);
+      }
+
+      function draw() {
+        const image = ctx.createImageData(width, height);
+        for (let i = 0; i < size; i += 1) {
+          const p = i * 4;
+          const s = signal[i];
+          const m = memory[i];
+          const r = route[i];
+          image.data[p] = Math.floor(8 + m * 220 + s * 40);
+          image.data[p + 1] = Math.floor(20 + r * 190 + s * 110);
+          image.data[p + 2] = Math.floor(18 + s * 210 + m * 24);
+          image.data[p + 3] = 255;
+        }
+        const buffer = document.createElement("canvas");
+        buffer.width = width;
+        buffer.height = height;
+        buffer.getContext("2d").putImageData(image, 0, 0);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(buffer, 0, 0, canvas.width, canvas.height);
+      }
+
+      function frame() {
+        if (running) {
+          for (let i = 0; i < 2; i += 1) step();
+          draw();
+          updateReadout();
+        }
+        requestAnimationFrame(frame);
+      }
+
+      runButton.addEventListener("click", () => {
+        running = !running;
+        runButton.textContent = running ? "Pause" : "Run";
+      });
+
+      pulseButton.addEventListener("click", () => {
+        inject(pattern.value);
+        for (let i = 0; i < 10; i += 1) step();
+        draw();
+        updateReadout();
+      });
+
+      resetButton.addEventListener("click", reset);
+
+      reset();
+      frame();
+    </script>
+  </body>
+</html>
