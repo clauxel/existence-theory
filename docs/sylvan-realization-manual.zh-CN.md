@@ -56,6 +56,15 @@
 - 能在连续输入后保留短期状态。
 - 改变“矿晶记忆”后，系统对同一输入产生不同倾向。
 
+最先做的 100 次数据：
+
+1. 打开 `sylvan-alpha-builder.html`。
+2. 分别选择 rain、heat、shade、mineral。
+3. 每种模式运行 25 次：Pulse、等待状态变化、Record。
+4. Export 导出 CSV。
+5. 用 CSV 检查四种输入是否形成不同的 signal、memory、routing 和 variance 分布。
+6. 如果四类分布完全混在一起，先调整模拟器参数，不急着进入实体材料。
+
 ### Alpha-1：非活体物理场
 
 目的：不用生物材料，先把自然模拟结构做成可拍照、可测量的物理 reservoir。

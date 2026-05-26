@@ -185,7 +185,7 @@
 
       .controls {
         display: grid;
-        grid-template-columns: 1fr auto auto auto;
+        grid-template-columns: 1fr repeat(5, auto);
         gap: 10px;
         margin-top: 14px;
       }
@@ -210,7 +210,7 @@
 
       .readout {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 8px;
         margin-top: 12px;
       }
@@ -393,6 +393,8 @@
               </select>
               <button id="pulse" type="button">Pulse</button>
               <button id="run" type="button">Run</button>
+              <button id="record" type="button">Record</button>
+              <button id="export" type="button">Export</button>
               <button id="reset" type="button">Reset</button>
             </div>
             <div class="readout">
@@ -400,6 +402,7 @@
               <div><strong id="stability">0.00</strong>stability</div>
               <div><strong id="memory">0.00</strong>memory</div>
               <div><strong id="routing">0.00</strong>routing</div>
+              <div><strong id="samples">0</strong>samples</div>
             </div>
           </section>
         </section>
@@ -528,8 +531,11 @@
       const stability = document.getElementById("stability");
       const memoryLabel = document.getElementById("memory");
       const routingLabel = document.getElementById("routing");
+      const sampleLabel = document.getElementById("samples");
       const runButton = document.getElementById("run");
       const pulseButton = document.getElementById("pulse");
+      const recordButton = document.getElementById("record");
+      const exportButton = document.getElementById("export");
       const resetButton = document.getElementById("reset");
 
       const width = 96;
@@ -541,6 +547,7 @@
       let route = new Float32Array(size);
       let running = false;
       let tick = 0;
+      const samples = [];
 
       function idx(x, y) {
         return y * width + x;
@@ -649,6 +656,37 @@
         routingLabel.textContent = f.r.toFixed(2);
       }
 
+      function recordSample() {
+        const f = features();
+        samples.push({
+          tick,
+          pattern: pattern.value,
+          action: action.textContent,
+          stability: stability.textContent,
+          signal_mean: f.s.toFixed(5),
+          memory_mean: f.m.toFixed(5),
+          routing_mean: f.r.toFixed(5),
+          signal_variance: f.variance.toFixed(5),
+        });
+        sampleLabel.textContent = String(samples.length);
+      }
+
+      function exportSamples() {
+        if (!samples.length) recordSample();
+        const headers = Object.keys(samples[0]);
+        const lines = [headers.join(",")].concat(
+          samples.map((row) => headers.map((key) => JSON.stringify(row[key] ?? "")).join(",")),
+        );
+        const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `sylvan-alpha-${Date.now()}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(link.href);
+      }
+
       function draw() {
         const image = ctx.createImageData(width, height);
         for (let i = 0; i < size; i += 1) {
@@ -690,6 +728,8 @@
         updateReadout();
       });
 
+      recordButton.addEventListener("click", recordSample);
+      exportButton.addEventListener("click", exportSamples);
       resetButton.addEventListener("click", reset);
 
       reset();
